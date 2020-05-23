@@ -1,0 +1,132 @@
+what I want to accomplish: I wanna be able to better track my overall productivity.
+
+I use the apple reminders app as my main tool for tracking tasks. This includes personal, work
+related tasks and entretainment (Podcasts, errands, work tasks, persoanl learning). Remidners 
+is my app of choice for tracking progress in acomplishing goals.
+
+--|> Design:
+This is a pet project in which I wanna be able to create a weekly report that includes 
+metrics for tracking my productivity. The weekly report will be emailed to my personal
+gmail account on a weekly basis. There will also be a google document logging all tasks.
+
+Components of report:
+productivity:
+	1. Tasks completed.
+	2. New tasks assigned.
+	3. burn down chart.
+
+mobility:
+	1. Maybe adding location tracking hourly that can be used in case of lost.
+
+Stocks:
+	1. There is a wrapper for robinhood. Maybe use it for reports?
+
+
+-|> TOOLING:
+- pyicloud  (IN USE)
+Is a tool for interacting with icloud services through the web. The problem is that we 
+do not have a function to get all avaliable reminders. You can only post reminders.
+https://github.com/picklepete/pyicloud
+
+- IFTT (IN USE)
+Is a tool that runs on IOS and is able to get any new reminder or any completed reminder into 
+another app. This can be evernote or google docs. I can let IFTTT run in my ipad (which is alwyas
+hooked up to wifi and at home) log the reminders to my application of choice. This apps will get the
+reminders and send the to the app of choice about every hour.
+
+- Evernote API.  (DECIDED NOT TO USE)
+This api seems complex to use and not very well supported. Its on beta for python3
+https://dev.evernote.com/doc/start/python.php
+https://github.com/evernote/evernote-sdk-python3
+
+- Google Docs API. (IN USE)
+My top option. The API is well documented plus easy to integrate with gmails API.
+https://developers.google.com/docs/api
+
+- Google gmail API.(IN USE) 
+My top option for sending the report to my personal account. API is well 
+supported and documented.
+https://developers.google.com/gmail/api
+
+- Robinhood wrapper. (Not sure yet)
+https://github.com/robinhood-unofficial/pyrh (can be dangerouse bc of security)
+
+- Crontab (Linux). (IN USE)
+
+
+-|> Questions to be answered.
+How are we gonna be checking for new and completed reminders? ANS: There is a module for this 
+the module is called reports. 
+https://pypi.org/project/reports/
+What is the report going to include? exiting? only new? only completed?
+How am I going to make sure that the job runs when the machine is off?
+
+
+-|> Looking a tool to generate the report on. I have a few options:
+- Generate the reports manually with .txt templates that I can slice.
+- difflib is a module for diffing and generating reports. This might be useful for quickly diffing the 
+document.
+- creating a log of files that stores weekly changes.
+- Another way to pull out new tasks is by date.
+
+ 
+###################### P R O G R E S S - L O G ###################################
+
+May 5 2020
+1. I was able to get already the reminders out through IFTTT to a google document
+2. I was able to access the list of new and completed reminders through the google doc
+API
+3. I was able to send an email through the gmail API.
+
+May 6 2020
+1. I was able to put the gmail api and document api into different mudles that get imported 
+into the main file.
+
+May 7 2020
+1. I was able to create a queu of reminders that will go into the document. Then they will get log into a document, and the other reminders
+will get used for the report.
+
+May 8 2020
+1. I was able to break the reminders into a lists.
+
+May 9 2020
+1. I created a linux cron job that will execute the script.
+
+May 11 2020
+1. Implemented a function that buckets all tasks into all existing categories of tasks 
+
+May 19 2020
+1. I finished implementing all of the features of the program. Now I its unit testing
+I have 4 unit tests.
+2. I wanna make sure that I start adding some logging features to the appplication
+3. 4/9 functions are no using unit tests
+
+May 20 2020 
+1. Refactor the all of the functions and made them into a class
+
+################### THINGS TO LEARN ##############################################
+
+1. I tried deleting the file but did not remember I use the unique key to acccess it. Deleting the file would allow me 
+to know the new reminers that were created in the past week -- not a very nice solution. This did not work because 
+everytime there would be a new file created it would have a new key. Remember to step through the process step by step.
+This will help you forecast issues. A lot of time was kinda wasted with this.
+
+2. Be careful when reasearching. So I wanted was looking for solutions to be able to to classify the newly created reminders.
+I looked into the opstions in IFTTT to see if I could add the completions date -- I had only seen the ceation date. I did not 
+find completion date but I did not realize that I was looking in the IFTTT configuration of the newly created reminders. The 
+configuration for completed tasks HAS the option to add the completion date. Remember to be careful and use comparison as to 
+find answers to questions.
+
+3. When stuck look for ways to break the tasks into the smaller peaces. Work myself backwards on steps. In debugging mode 
+DO NOT THINK END TO END!. Break the flow and test individually to be able to pin point the issue.
+
+
+4. Learning how to log. There are 4 types of loggings levels that can be done:
+    debug 
+    info 
+    warnning 
+    error 
+    critical
+    Usually these levels have a number that represents them and they chance by a factor of 10.
+    
+    
