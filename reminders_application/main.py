@@ -1,7 +1,6 @@
 from datetime import datetime as dt
+
 from apple_reminder_reporter.reminders_kpi_reporter import *
-from google_docs_api.google_docs import *
-from google_email_api.gmail_api import *
 from google_docs_api.google_docs import *
 from google_email_api.gmail_api import *
 

@@ -158,7 +158,6 @@ class ReportGraphing:
         """creates pie chart for the number of tasks closed and initated in
         each working category"""
         current_date = str(dt.today().date())
-        print(current_date)
         tasks_to_graph = ReportGenerator.categorize_tasks(self)
         keys = [key for key in tasks_to_graph]
         values = [int(tasks_to_graph[value]) for value in tasks_to_graph]
@@ -203,7 +202,6 @@ class TaskLogging:
         path_and_name = "task_logging/" + current_date + "/" + self + ".txt"
         path = "task_logging/" + current_date
         subprocess.call("mkdir " + path, shell=True)
-        print("The file has been created")
         subprocess.call("touch " + path_and_name, shell=True)
         log = ""
         for tasks in tasks_to_log:
