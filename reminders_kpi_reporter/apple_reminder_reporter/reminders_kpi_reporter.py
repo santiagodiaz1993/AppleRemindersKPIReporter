@@ -11,7 +11,8 @@ class ReportGenerator:
     creation of a report"""
 
     reminders_formatted = []
-
+    # TODO(santiago): figure out if to keep these variables
+    # or how to properly put them in the class
     def __init__(self, document):
         self.document = document
         self.tasks_with_priority_set = []
