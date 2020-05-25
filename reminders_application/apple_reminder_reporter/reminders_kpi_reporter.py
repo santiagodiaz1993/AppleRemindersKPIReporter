@@ -29,11 +29,12 @@ class ReportGenerator:
         reminders_list = self.split(" //-//")
         reminders_formatted = []
         for reminder in reminders_list:
-            reminder = reminder[1:]
+            # reminder = reminder[1:]
             reminders = reminder.split("$$")
             reminders = reminders[:-1]
             reminders_formatted.append(reminders)
         reminders_formatted = reminders_formatted[:-1]
+        print(reminders_formatted)
         return reminders_formatted
 
     def get_tasks_with_priority_set(self):
@@ -208,4 +209,5 @@ class TaskLogging:
             log = log + tasks[1] + ", "
         with open(path_and_name, "w") as task_completed:
             task_completed.write(log)
+        print(subprocess.call("pwd", shell=True))
         return log
