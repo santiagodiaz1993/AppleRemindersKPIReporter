@@ -1,41 +1,50 @@
 from datetime import datetime as dt
+import json
 
 from apple_reminder_reporter.reminders_kpi_reporter import *
 from google_docs_api.google_docs import *
 from google_email_api.gmail_api import *
 
+with open("configuration.json") as config:
+    user_configuration = json.load(config)
 
-# TODO(santiago): Remove unnecessary scopes
-SCOPES = [
-    "https://www.googleapis.com/auth/drive.activity.readonly",
-    "https://www.googleapis.com/auth/documents",
-    "https://mail.google.com/",
-]
 
-reminders_completed = get_text("19GFEhbZ0KlWknhEw6Js0mCEeIwNQgVeif-3Bw_yFpVs")
-reminders_started = get_text("1HuonqcF3SwcfwTebKL2hCNW3LjZ87jrC4byV_Zh7PQ0")
+SCOPES = user_configuration["SCOPES"]
 
-tasks_organized = ReportGenerator.get_reminders_from_document(
+reminders_completed = get_text(
+    user_configuration["completed_tasks_document_id"]
+)
+reminders_initiated = get_text(
+    user_configuration["initiated_tasks_document_id"]
+)
+
+tasks_completed_formatted = ReportGenerator.get_reminders_from_document(
     reminders_completed
 )
-TaskLogging.log_tasks("test", tasks_organized)
-ReportGraphing.build_bar_chart(tasks_organized, 3)
-ReportGraphing.build_pie_chart(tasks_organized)
-ReportGenerator.get_tasks_with_priority_set(tasks_organized)
-ReportGenerator.get_number_of_reminders(tasks_organized)
-ReportGenerator.get_tasks_name(tasks_organized)
-ReportGenerator.get_tasks_in_time_range(tasks_organized, 22)
-ReportGenerator.create_date_ranges(3)
-ReportGenerator.classify_tasks_in_date_range(tasks_organized, 4)
-TaskLogging.log_tasks("logging", tasks_organized)
-ReportGenerator.categorize_tasks(tasks_organized)
+tasks_initiated_formatted = ReportGenerator.get_reminders_from_document(
+    reminders_initiated
+)
+
+TaskLogging.log_tasks("test", tasks_completed_formatted)
+TaskLogging.log_tasks("test", tasks_completed_formatted)
+ReportGraphing.build_bar_chart(tasks_completed_formatted, 3)
+ReportGraphing.build_pie_chart(tasks_completed_formatted)
+#ReportGenerator.get_tasks_with_priority_set(tasks_completed_formatted)
+#ReportGenerator.get_number_of_reminders(tasks_completed_formatted)
+#ReportGenerator.get_tasks_name(tasks_completed_formatted)
+#ReportGenerator.get_tasks_in_time_range(tasks_completed_formatted, 22)
+#ReportGenerator.create_date_ranges(3)
+#ReportGenerator.classify_tasks_in_date_range(tasks_completed_formatted, 4)
+#TaskLogging.log_tasks("logging", tasks_completed_formatted)
+#ReportGenerator.categorize_tasks(tasks_completed_formatted)
+
 
 current_date = str(dt.today().date())
 request_message = EmailInteraction.CreateMessageWithAttachment(
-    "santiagobmxdiaz@gmail.com",
-    "santiagobmxdiaz@gmail.com",
-    "weekly Productivity Report",
-    TaskLogging.load_template("template1", tasks_organized, tasks_organized),
+    user_configuration["sender_email"],
+    user_configuration["send_to_email"],
+    user_configuration["email_subject"],
+    TaskLogging.load_template("template1", tasks_completed_formatted, tasks_initiated_formatted),
     "task_logging/" + current_date + "/",
     [
         "productivity_distribution_" + current_date + ".png",
@@ -45,6 +54,6 @@ request_message = EmailInteraction.CreateMessageWithAttachment(
 
 EmailInteraction.SendMessage(
     EmailInteraction.authorization(),
-    "santiagobmxdiaz@gmail.com",
+    user_configuration["sender_email"],
     request_message,
 )
