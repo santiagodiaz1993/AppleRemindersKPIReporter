@@ -1,7 +1,0 @@
-Happy day Santiago, 
-This week you have completed %s tasks and you have initiated %s tasks.
-The following tasks were completed and had a priority set:
-%s
-The following tasks were initiated with a priority set:
-%s
-Your progress and your time distribution charts are below:

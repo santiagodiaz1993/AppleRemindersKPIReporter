@@ -1,9 +1,9 @@
 # coding=utf-8
 import datetime as dt
 from datetime import datetime
-from reminders_application.google_email_api.gmail_api import *
-from reminders_application.google_docs_api.google_docs import *
-from reminders_application.apple_reminder_reporter.reminders_kpi_reporter import *
+from application.google_email_api.gmail_api import *
+from application.google_docs_api.google_docs import *
+from application.apple_reminder_reporter.reminders_kpi_reporter import *
 
 
 def test_get_reminders_from_document():
@@ -65,23 +65,6 @@ def test_get_tasks_in_time_range():
     assert actual_result == expected_value
 
 
-# def test_log_tasks():
-#    tasks_for_logging_test = [
-#        ["Testing List", " Ffoutfd", " May 09, 2020 at 11:41PM", " None"],
-#        ["Testing List", " Jgkccccccui", " May 09, 2020 at 11:41PM", " None"],
-#        [
-#            "Testing List",
-#            " Hgkcgjcutcu",
-#            " May 09, 2020 at 11:41PM",
-#            " Medium",
-#        ],
-#    ]
-#    log = TaskLogging.log_tasks("test", tasks_for_logging_test)
-#    expected = " Ffoutfd,  Jgkccccccui,  Hgkcgjcutcu, "
-#    assert log == expecte
-#
-
-
 def test_categorize_tasks():
     tasks_for_logging_test = [
         ["Testing List", " Ffoutfd", " May 09, 2020 at 11:41PM", " None"],
@@ -106,8 +89,22 @@ def test_categorize_tasks():
         "Testing List": 3,
     }
     assert categorized_tasks == expected_categorization
-
-
+    
+# def test_log_tasks():
+#    tasks_for_logging_test = [
+#        ["Testing List", " Ffoutfd", " May 09, 2020 at 11:41PM", " None"],
+#        ["Testing List", " Jgkccccccui", " May 09, 2020 at 11:41PM", " None"],
+#        [
+#            "Testing List",
+#            " Hgkcgjcutcu",
+#            " May 09, 2020 at 11:41PM",
+#            " Medium",
+#        ],
+#    ]
+#    log = TaskLogging.log_tasks("test", tasks_for_logging_test)
+#    expected = " Ffoutfd,  Jgkccccccui,  Hgkcgjcutcu, "
+#    assert log == expecte
+#
 # def test_classify_by_date_range():
 #    tasks = [
 #            ['Testing List', ' Ffoutfdrdr7isyidd', ' May 09, 2020 at 11:41PM', ' None'],
