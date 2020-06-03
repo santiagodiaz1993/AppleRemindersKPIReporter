@@ -1,0 +1,12 @@
+{
+   "sender_email":"santiagobmxdiaz@gmail.com",
+   "send_to_email":"santiagobmxdiaz@gmail.com",
+   "email_subject":"Weekly Productivity Report test",
+   "SCOPES":[
+      "https://www.googleapis.com/auth/drive.activity.readonly",
+      "https://www.googleapis.com/auth/documents",
+      "https://mail.google.com/"
+   ],
+   "completed_tasks_document_id":"19GFEhbZ0KlWknhEw6Js0mCEeIwNQgVeif-3Bw_yFpVs",
+   "initiated_tasks_document_id":"1HuonqcF3SwcfwTebKL2hCNW3LjZ87jrC4byV_Zh7PQ0"
+}
