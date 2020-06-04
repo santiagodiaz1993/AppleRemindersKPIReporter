@@ -1,11 +1,17 @@
-from google_reporting_api import GoogleAPISession
+from google_reporting_api import GoogleAPISessions
 
 
 def main():
-    emailInteraction = GoogleAPISession(
-        "19GFEhbZ0KlWknhEw6Js0mCEeIwNQgVeif-3Bw_yFpVs"
+    emailInteraction = GoogleAPISessions(
+        "9GFEhbZ0KlWknhEw6Js0mCEeIwNQgVeif-3Bw_yFpVs"
     )
     print(emailInteraction.get_reminders_from_document())
+    emailInteraction.create_message(
+        sender="santiagobmxdiaz@gmail.com",
+        to="santiagobmxdiaz@gmail.com",
+        subject="practice",
+        message_text="helo this is a test",
+    )
 
     # with open("configuration.json") as config:
     #     user_configuration = json.load(config)

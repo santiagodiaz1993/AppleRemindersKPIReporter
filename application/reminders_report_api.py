@@ -10,16 +10,16 @@ class ReportGenerator:
     """contains a set of functions that manipulates a list of tasks for the
     creation of a report"""
 
-    # def __init__(self, reminders_as_text, number_of_days=4):
-    #    self.reminders_as_text = reminders_as_text
-    #    self.numbers_of_days = number_of_days
-    #    self.get_reminders_from_document(reminders_as_text)
+    def __init__(self, reminders, number_of_days=4):
 
-    def get_tasks_with_priority_set(self):
+        self.reminders = reminders
+        self.numbers_of_days = number_of_days
+
+    def get_tasks_with_priority_set(self, reminders):
         """takes a list of tasks and their attributes and returns a list
         with the name of tasks that have a priority set"""
         tasks_with_priority_set = ""
-        for reminder in self:
+        for reminder in reminders:
             if (
                 reminder[3] == " Low"
                 or reminder[3] == " Medium"
@@ -28,19 +28,19 @@ class ReportGenerator:
                 tasks_with_priority_set = reminder[1] + "\n"
         return tasks_with_priority_set
 
-    def get_tasks_name(self):
+    def get_tasks_name(self, reminder):
         """takes a list of tasks and their attributes and returns the name of
         the tasks in string format"""
         reminders_names = ""
-        for reminder in self:
+        for reminder in reminders:
             reminders_names = reminders_names + reminder[1] + ", "
         return reminders_names
 
-    def get_tasks_in_time_range(self, number_of_days):
+    def get_tasks_in_time_range(self, reminders, number_of_days):
         """takes a list of tasks and returns the tasks that have a
         date in  between numbers_of_days and the present"""
         last_week_reminders = []
-        for reminder in self:
+        for reminder in reminders:
             date = reminder[2]
             date = dt.strptime(date, " %b %d, %Y at %I:%M%p")
             today = dt.today()
@@ -51,7 +51,7 @@ class ReportGenerator:
                 print("There where no new reminders found")
         return last_week_reminders
 
-    def create_date_ranges(self):
+    def create_date_ranges(self, number_of_days):
         """creates a list with date ranges"""
         range_assignment_dates = {}
         starting_limit_date = dt(2020, 5, 1).date()
@@ -59,7 +59,7 @@ class ReportGenerator:
         date = dt.today().date()
         while starting_limit_date <= date:
             date_range.insert(0, date)
-            date = date - datetime.timedelta(days=self)
+            date = date - datetime.timedelta(days=numbers_of_days)
         for index in range(len(date_range) - 1):
             date_key_name = (
                 str(date_range[index]) + " to " + str(date_range[index + 1])

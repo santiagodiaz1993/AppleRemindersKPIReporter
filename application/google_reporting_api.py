@@ -18,58 +18,35 @@ DISCOVERY_DOC = "https://docs.googleapis.com/$discovery/rest?version=v1"
 SCOPES = [
     "https://www.googleapis.com/auth/drive.activity.readonly",
     "https://www.googleapis.com/auth/documents",
-    "https://mail.google.com/"
-   ]
+    "https://mail.google.com/",
+]
 
 
-class EmailInteraction:
-
-    CLIENT_SECRET_FILE = "client_id.json"
-
+class GoogleAPISession:
     def __init__(self, document_id, creds_path=None):
         self.document_id = document_id
         self.service = None
-        if creds_path is None:
-            self.google_authentication()
-        else:
-            self.google_authentication(creds_path=creds_path)
+        self.google_authentication(creds_path)
 
-    def google_authentication(self, creds_path=None):
+    def google_authentication(self, creds_path):
         """
-        Authenticate user's credentials so they can access their email or google docs
+        Authenticate user's credentials so they can access their email or
+        google docs
         """
-        if creds_path:
-            creds_path = creds_path
-        else:
+        if creds_path is None:
             creds_path = "./credentials/docs_credentials.json"
         creds = None
         if os.path.exists("./credentials/docs_token.pickle"):
             with open("./credentials/docs_token.pickle", "rb") as token:
                 creds = pickle.load(token)
         if not creds:
-            print("jhjhkgjhkg")
             flow = InstalledAppFlow.from_client_secrets_file(
                 creds_path, SCOPES
-                )
+            )
             creds = flow.run_local_server(port=0)
             with open("./credentials/docs_token.pickle", "wb") as token:
                 pickle.dump(creds, token)
-        self.service = build("gmail", "v1", credentials=creds)
-        token.close()
-
-
-    def send_message(self, service, user_id, message):
-        try:
-            message = (
-                service.users()
-                .messages()
-                .send(userId=user_id, body=message)
-                .execute()
-            )
-            print("Message Id: %s" % message["id"])
-            return message
-        except errors.HttpError as error:
-            print("An error occurred: %s" % error)
+        self.service = build("docs", "v1", credentials=creds)
 
     def create_message(self, sender, to, subject, message_text):
         message = MIMEText(message_text)
@@ -128,11 +105,22 @@ class EmailInteraction:
             ).decode()
         }
 
+    def send_message(self, service, user_id, message):
+        try:
+            message = (
+                service.users()
+                .messages()
+                .send(userId=user_id, body=message)
+                .execute()
+            )
+            print("Message Id: %s" % message["id"])
+            return message
+        except errors.HttpError as error:
+            print("An error occurred: %s" % error)
+
     def get_reminders_from_document(self):
-        print(help(self.service))
         result = (
-            self.service
-        #    self.service(self.document_id).documents().get(documentId=self.document_id()).execute()
+            self.service.documents().get(documentId=self.document_id).execute()
         )
         document = json.loads(json.dumps(result))
         reminders = []
@@ -143,4 +131,4 @@ class EmailInteraction:
                 )
         reminders = [reminder.split("$$") for reminder in reminders]
         reminders = [reminder[:-1] for reminder in reminders]
-        return reminders if reminders else None
+        return reminders
