@@ -1,0 +1,10 @@
+from google_reporting_api import GoogleDocsSession, GoogleEmailSession
+
+if __name__ == "__main__":
+    email = GoogleEmailSession(
+        sender="santiagobmxdiaz@gmail.com",
+        to="santiagobmx@hotmail.com",
+        subject="hello",
+        message_text="hello",
+    )
+    email.create_message_with_attachment()

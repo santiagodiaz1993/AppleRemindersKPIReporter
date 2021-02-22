@@ -28,44 +28,40 @@ class GoogleEmailSession:
         to,
         subject,
         message_text,
-        file_dir=None,
         filename=None,
-        creds_path=None,
+        credentials_file="./credentials/email_credentials.json",
     ):
         self.sender = sender
         self.to = to
         self.subject = subject
         self.message_text = message_text
         self.service = None
-        self.google_authentication(creds_path)
+        self.credentials_file = credentials_file
+        self.filename = filename
+        self.google_authentication()
 
-    def google_authentication(self, creds_path):
+    def authenticate(self):
         """
         Authenticate user's credentials so they can access their email or
         google docs
         """
-        if creds_path is None:
-            creds_path = "./credentials/email_credentials.json"
-        creds = None
         if os.path.exists("./credentials/email_token.pickle"):
             with open("./credentials/email_token.pickle", "rb") as token:
                 creds = pickle.load(token)
-        if not creds:
+        else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                creds_path, SCOPES
+                self.credentials_file, SCOPES
             )
             creds = flow.run_local_server(port=0)
             with open("./credentials/email_token.pickle", "wb") as token:
                 pickle.dump(creds, token)
-        self.service = build("gmail", "v1", credentials=creds)
+            self.service = build("gmail", "v1", credentials=creds)
 
-    def create_message_with_attachment(
-        self, sender, to, subject, message_text, file_dir, filename
-    ):
+    def add_details(self):
         message = MIMEMultipart()
-        message["to"] = to
-        message["from"] = sender
-        message["subject"] = subject
+        message["to"] = self.to
+        message["from"] = self.sender
+        message["subject"] = self.subject
 
         msg = MIMEText(message_text)
         message.attach(msg)
